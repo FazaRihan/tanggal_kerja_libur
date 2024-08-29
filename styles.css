@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin: 20px;
+}
+
+#year-selector {
+    margin: 20px;
+}
+
+#year-selector button {
+    font-size: 16px;
+    padding: 10px;
+    margin: 0 10px;
+}
+
+#year-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#calendar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.month {
+    width: 320px;  /* Lebar bulanan disesuaikan */
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.month h2 {
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+}
+
+.table-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-top: 1px solid #ddd;
+    table-layout: fixed;  /* Menetapkan lebar kolom tetap */
+}
+
+.day {
+    padding: 10px;
+    text-align: center;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    box-sizing: border-box;  /* Menghindari masalah ukuran */
+    overflow: hidden;  /* Menjaga isi tetap dalam batas */
+}
+
+.day:last-child {
+    border-right: none;
+}
+
+.day.libur {
+    background-color: #a5c9f1;
+}
+
+.day.start-date {
+    background-color: #f9d342;
+    color: #000;
+    font-weight: bold;
+}
