@@ -1,39 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
     const periodeKerja = 56;  // Hari kerja
     const periodeLibur = 14;  // Hari libur
-    let currentYear = new Date().getFullYear();  // Tahun saat ini
+    let currentYear = 2024;  // Tahun awal
 
-    const startDate = new Date(currentYear, 8, 3);  // 3 September tahun saat ini
-    const holidays = new Map();
-    const startDates = new Map();
+    const startDate = new Date(currentYear, 8, 3);  // 3 September tahun awal
+    const endDate = new Date(startDate);
+    endDate.setFullYear(endDate.getFullYear() + 2);  // Dua tahun ke depan
 
-    // Fungsi untuk menghitung tanggal mulai kerja dan libur
-    function calculateWorkAndHolidays() {
-        let currentDate = new Date(startDate);  // Mulai dari 3 September
-
-        // Lanjutkan perhitungan tanpa batas tahun
-        while (true) {
-            let year = currentDate.getFullYear();
-
-            if (!startDates.has(year)) {
-                startDates.set(year, []);
-                holidays.set(year, []);
-            }
-
-            startDates.get(year).push(new Date(currentDate));  // Menandai tanggal mulai kerja
-            currentDate.setDate(currentDate.getDate() + periodeKerja);  // Tambahkan periode kerja
-
-            let holidayStart = new Date(currentDate);
-            holidays.get(year).push(new Date(holidayStart));  // Menandai hari libur
-            currentDate.setDate(currentDate.getDate() + periodeLibur);  // Tambahkan periode libur
-
-            // Jika sudah melebihi tahun yang diperlukan, berhenti
-            if (year > currentYear + 50) break;  // Batas aman untuk menghentikan loop
-        }
+    // Menghitung tanggal libur
+    const holidays = [];
+    const startDates = [];
+    let currentDate = new Date(startDate);
+    while (currentDate < endDate) {
+        let holidayStart = new Date(currentDate);
+        holidayStart.setDate(currentDate.getDate() + periodeKerja);
+        holidays.push(holidayStart);
+        startDates.push(new Date(currentDate));  // Menyimpan tanggal awal kerja
+        currentDate = new Date(holidayStart);
+        currentDate.setDate(holidayStart.getDate() + periodeLibur);
     }
 
-    calculateWorkAndHolidays();  // Panggil fungsi untuk menghitung tanggal kerja dan libur
-
+    // Fungsi untuk membuat kalender bulan
     function createCalendar(year) {
         document.getElementById('calendar').innerHTML = '';  // Kosongkan konten kalender
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -60,37 +47,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 tableContainer.appendChild(dayCell);
             });
 
-            // Menambahkan tanggal dari bulan sebelumnya
-            for (let i = 1; i < firstDay.getDay(); i++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'day';
-                dayCell.style.opacity = '0.5';  // Menandakan bahwa ini adalah tanggal bulan sebelumnya
-                tableContainer.appendChild(dayCell);
+            // Menambahkan hari dalam bulan
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                tableContainer.appendChild(document.createElement('div'));
             }
 
-            // Menambahkan hari dalam bulan
             for (let day = 1; day <= lastDay.getDate(); day++) {
                 const dayDate = new Date(year, month, day);
                 const dayCell = document.createElement('div');
                 dayCell.className = 'day';
                 dayCell.textContent = day;
 
-                if (holidays.get(year) && holidays.get(year).some(holiday => holiday.getMonth() === month && holiday.getDate() === day)) {
+                if (holidays.some(holiday => holiday.getFullYear() === year && holiday.getMonth() === month && holiday.getDate() === day)) {
                     dayCell.classList.add('libur');
                 }
 
-                if (startDates.get(year) && startDates.get(year).some(start => start.getMonth() === month && start.getDate() === day)) {
+                if (startDates.some(start => start.getFullYear() === year && start.getMonth() === month && start.getDate() === day)) {
                     dayCell.classList.add('start-date');
                 }
 
-                tableContainer.appendChild(dayCell);
-            }
-
-            // Menambahkan tanggal dari bulan berikutnya
-            for (let i = lastDay.getDay(); i < 6; i++) {
-                const dayCell = document.createElement('div');
-                dayCell.className = 'day';
-                dayCell.style.opacity = '0.5';  // Menandakan bahwa ini adalah tanggal bulan berikutnya
                 tableContainer.appendChild(dayCell);
             }
 
@@ -102,13 +77,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Tombol navigasi
     document.getElementById('prev-year').addEventListener('click', function () {
-        currentYear--;
-        createCalendar(currentYear);
+        if (currentYear > 2024) {
+            currentYear--;
+            createCalendar(currentYear);
+        }
     });
 
     document.getElementById('next-year').addEventListener('click', function () {
-        currentYear++;
-        createCalendar(currentYear);
+        if (currentYear < 2025) {
+            currentYear++;
+            createCalendar(currentYear);
+        }
     });
 
     // Buat kalender untuk tahun awal
