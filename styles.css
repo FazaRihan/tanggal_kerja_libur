@@ -13,17 +13,31 @@ h1 {
 
 #year-selector {
     margin: 20px;
+    display: flex;
+    align-items: center;
 }
 
 #year-selector button {
     font-size: 16px;
-    padding: 10px;
+    padding: 10px 20px;
     margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#year-selector button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 #year-label {
     font-size: 20px;
     font-weight: bold;
+    margin: 0 20px;
 }
 
 #calendar {
@@ -77,4 +91,31 @@ h1 {
     background-color: #f9d342;
     color: #000;
     font-weight: bold;
+}
+
+#legend {
+    margin: 20px;
+    font-size: 16px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.color-box {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.color-box.libur {
+    background-color: #a5c9f1;
+}
+
+.color-box.start-date {
+    background-color: #f9d342;
 }
